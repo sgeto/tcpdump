@@ -1,0 +1,497 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AFE76CB2-7531-4BBF-A40F-7984F2FF0F9D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>tcpdump</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>tcpdump</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\..\libpcap\;$(OPENSSL_ROOT_DIR)\include;$(PACKET_DLL_DIR)\include</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(SolutionDir)config.h
+;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OPENSSL_ROOT_DIR)\lib;$(PACKET_DLL_DIR)\Lib;$(PACKET_DLL_DIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>@echo off
+:: read VERSION and store its content in %vstring%
+for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
+set vstring=%%F
+)
+
+:: Construct the date string and store it in %_curdate%
+:: Note: This presumes that your date string is formatted 
+:: as 10/06/2017 or Fri 10/06/2017
+:: for /f "tokens=* delims=" %%x in (`echo _%date:~-4,4%_%date:~-10,2%_%date:~-7,2%`) do (
+:: set curdate=%%x
+:: )
+
+:: Uncomment the following lines (and comment the above) 
+:: if you are in a country other than the United States.
+for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
+set curdate=%%A
+)
+
+echo.
+echo Building TCPdump %vstring%%curdate%
+echo.
+
+echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+      <Message>Generate version.c</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\..\libpcap\;$(OPENSSL_ROOT_DIR)\include;$(PACKET_DLL_DIR)\include</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(SolutionDir)config.h
+;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OPENSSL_ROOT_DIR)\lib;$(PACKET_DLL_DIR)\Lib\x64;$(PACKET_DLL_DIR)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>@echo off
+:: read VERSION and store its content in %vstring%
+for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
+set vstring=%%F
+)
+
+:: Construct the date string and store it in %_curdate%
+:: Note: This presumes that your date string is formatted 
+:: as 10/06/2017 or Fri 10/06/2017
+:: for /f "tokens=* delims=" %%x in (`echo _%date:~-4,4%_%date:~-10,2%_%date:~-7,2%`) do (
+:: set curdate=%%x
+:: )
+
+:: Uncomment the following lines (and comment the above) 
+:: if you are in a country other than the United States.
+for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
+set curdate=%%A
+)
+
+echo.
+echo Building TCPdump %vstring%%curdate%
+echo.
+
+echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+      <Message>Generate version.c</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\..\libpcap\;$(OPENSSL_ROOT_DIR)\include;$(PACKET_DLL_DIR)\include</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(SolutionDir)config.h
+;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OPENSSL_ROOT_DIR)\lib;$(PACKET_DLL_DIR)\Lib;$(PACKET_DLL_DIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>@echo off
+:: read VERSION and store its content in %vstring%
+for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
+set vstring=%%F
+)
+
+:: Construct the date string and store it in %_curdate%
+:: Note: This presumes that your date string is formatted 
+:: as 10/06/2017 or Fri 10/06/2017
+:: for /f "tokens=* delims=" %%x in (`echo _%date:~-4,4%_%date:~-10,2%_%date:~-7,2%`) do (
+:: set curdate=%%x
+:: )
+
+:: Uncomment the following lines (and comment the above) 
+:: if you are in a country other than the United States.
+for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
+set curdate=%%A
+)
+
+echo.
+echo Building TCPdump %vstring%%curdate%
+echo.
+
+echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+      <Message>Generate version.c</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\..\libpcap\;$(OPENSSL_ROOT_DIR)\include;$(PACKET_DLL_DIR)\include</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(SolutionDir)config.h
+;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OPENSSL_ROOT_DIR)\lib;$(PACKET_DLL_DIR)\Lib\x64;$(PACKET_DLL_DIR)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>@echo off
+:: read VERSION and store its content in %vstring%
+for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
+set vstring=%%F
+)
+
+:: Construct the date string and store it in %_curdate%
+:: Note: This presumes that your date string is formatted 
+:: as 10/06/2017 or Fri 10/06/2017
+:: for /f "tokens=* delims=" %%x in (`echo _%date:~-4,4%_%date:~-10,2%_%date:~-7,2%`) do (
+:: set curdate=%%x
+:: )
+
+:: Uncomment the following lines (and comment the above) 
+:: if you are in a country other than the United States.
+for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
+set curdate=%%A
+)
+
+echo.
+echo Building TCPdump %vstring%%curdate%
+echo.
+
+echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+      <Message>Generate version.c</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\missing\getopt_long.c" />
+    <ClCompile Include="..\setsignal.c" />
+    <ClCompile Include="..\tcpdump.c" />
+    <ClCompile Include="version.c" />
+    <ClCompile Include="..\addrtoname.c" />
+    <ClCompile Include="..\addrtostr.c" />
+    <ClCompile Include="..\af.c" />
+    <ClCompile Include="..\ascii_strcasecmp.c" />
+    <ClCompile Include="..\checksum.c" />
+    <ClCompile Include="..\cpack.c" />
+    <ClCompile Include="..\gmpls.c" />
+    <ClCompile Include="..\gmt2local.c" />
+    <ClCompile Include="..\in_cksum.c" />
+    <ClCompile Include="..\ipproto.c" />
+    <ClCompile Include="..\l2vpn.c" />
+    <ClCompile Include="..\machdep.c" />
+    <ClCompile Include="..\nlpid.c" />
+    <ClCompile Include="..\oui.c" />
+    <ClCompile Include="..\parsenfsfh.c" />
+    <ClCompile Include="..\print.c" />
+    <ClCompile Include="..\print-802_11.c" />
+    <ClCompile Include="..\print-802_15_4.c" />
+    <ClCompile Include="..\print-ah.c" />
+    <ClCompile Include="..\print-ahcp.c" />
+    <ClCompile Include="..\print-aodv.c" />
+    <ClCompile Include="..\print-aoe.c" />
+    <ClCompile Include="..\print-ap1394.c" />
+    <ClCompile Include="..\print-arcnet.c" />
+    <ClCompile Include="..\print-arp.c" />
+    <ClCompile Include="..\print-ascii.c" />
+    <ClCompile Include="..\print-atalk.c" />
+    <ClCompile Include="..\print-atm.c" />
+    <ClCompile Include="..\print-babel.c" />
+    <ClCompile Include="..\print-beep.c" />
+    <ClCompile Include="..\print-bfd.c" />
+    <ClCompile Include="..\print-bgp.c" />
+    <ClCompile Include="..\print-bootp.c" />
+    <ClCompile Include="..\print-bt.c" />
+    <ClCompile Include="..\print-calm-fast.c" />
+    <ClCompile Include="..\print-carp.c" />
+    <ClCompile Include="..\print-cdp.c" />
+    <ClCompile Include="..\print-cfm.c" />
+    <ClCompile Include="..\print-chdlc.c" />
+    <ClCompile Include="..\print-cip.c" />
+    <ClCompile Include="..\print-cnfp.c" />
+    <ClCompile Include="..\print-dccp.c" />
+    <ClCompile Include="..\print-decnet.c" />
+    <ClCompile Include="..\print-dhcp6.c" />
+    <ClCompile Include="..\print-domain.c" />
+    <ClCompile Include="..\print-dtp.c" />
+    <ClCompile Include="..\print-dvmrp.c" />
+    <ClCompile Include="..\print-eap.c" />
+    <ClCompile Include="..\print-egp.c" />
+    <ClCompile Include="..\print-eigrp.c" />
+    <ClCompile Include="..\print-enc.c" />
+    <ClCompile Include="..\print-esp.c" />
+    <ClCompile Include="..\print-ether.c" />
+    <ClCompile Include="..\print-fddi.c" />
+    <ClCompile Include="..\print-forces.c" />
+    <ClCompile Include="..\print-fr.c" />
+    <ClCompile Include="..\print-frag6.c" />
+    <ClCompile Include="..\print-ftp.c" />
+    <ClCompile Include="..\print-geneve.c" />
+    <ClCompile Include="..\print-geonet.c" />
+    <ClCompile Include="..\print-gre.c" />
+    <ClCompile Include="..\print-hncp.c" />
+    <ClCompile Include="..\print-hsrp.c" />
+    <ClCompile Include="..\print-http.c" />
+    <ClCompile Include="..\print-icmp.c" />
+    <ClCompile Include="..\print-icmp6.c" />
+    <ClCompile Include="..\print-igmp.c" />
+    <ClCompile Include="..\print-igrp.c" />
+    <ClCompile Include="..\print-ip.c" />
+    <ClCompile Include="..\print-ip6.c" />
+    <ClCompile Include="..\print-ip6opts.c" />
+    <ClCompile Include="..\print-ipcomp.c" />
+    <ClCompile Include="..\print-ipfc.c" />
+    <ClCompile Include="..\print-ipnet.c" />
+    <ClCompile Include="..\print-ipx.c" />
+    <ClCompile Include="..\print-isakmp.c" />
+    <ClCompile Include="..\print-isoclns.c" />
+    <ClCompile Include="..\print-juniper.c" />
+    <ClCompile Include="..\print-krb.c" />
+    <ClCompile Include="..\print-l2tp.c" />
+    <ClCompile Include="..\print-lane.c" />
+    <ClCompile Include="..\print-ldp.c" />
+    <ClCompile Include="..\print-lisp.c" />
+    <ClCompile Include="..\print-llc.c" />
+    <ClCompile Include="..\print-lldp.c" />
+    <ClCompile Include="..\print-lmp.c" />
+    <ClCompile Include="..\print-loopback.c" />
+    <ClCompile Include="..\print-lspping.c" />
+    <ClCompile Include="..\print-lwapp.c" />
+    <ClCompile Include="..\print-lwres.c" />
+    <ClCompile Include="..\print-m3ua.c" />
+    <ClCompile Include="..\print-medsa.c" />
+    <ClCompile Include="..\print-mobile.c" />
+    <ClCompile Include="..\print-mobility.c" />
+    <ClCompile Include="..\print-mpcp.c" />
+    <ClCompile Include="..\print-mpls.c" />
+    <ClCompile Include="..\print-mptcp.c" />
+    <ClCompile Include="..\print-msdp.c" />
+    <ClCompile Include="..\print-msnlb.c" />
+    <ClCompile Include="..\print-nflog.c" />
+    <ClCompile Include="..\print-nfs.c" />
+    <ClCompile Include="..\print-nsh.c" />
+    <ClCompile Include="..\print-ntp.c" />
+    <ClCompile Include="..\print-null.c" />
+    <ClCompile Include="..\print-olsr.c" />
+    <ClCompile Include="..\print-openflow-1.0.c" />
+    <ClCompile Include="..\print-openflow.c" />
+    <ClCompile Include="..\print-ospf.c" />
+    <ClCompile Include="..\print-ospf6.c" />
+    <ClCompile Include="..\print-otv.c" />
+    <ClCompile Include="..\print-pgm.c" />
+    <ClCompile Include="..\print-pim.c" />
+    <ClCompile Include="..\print-pktap.c" />
+    <ClCompile Include="..\print-ppi.c" />
+    <ClCompile Include="..\print-ppp.c" />
+    <ClCompile Include="..\print-pppoe.c" />
+    <ClCompile Include="..\print-pptp.c" />
+    <ClCompile Include="..\print-radius.c" />
+    <ClCompile Include="..\print-raw.c" />
+    <ClCompile Include="..\print-resp.c" />
+    <ClCompile Include="..\print-rip.c" />
+    <ClCompile Include="..\print-ripng.c" />
+    <ClCompile Include="..\print-rpki-rtr.c" />
+    <ClCompile Include="..\print-rrcp.c" />
+    <ClCompile Include="..\print-rsvp.c" />
+    <ClCompile Include="..\print-rt6.c" />
+    <ClCompile Include="..\print-rtsp.c" />
+    <ClCompile Include="..\print-rx.c" />
+    <ClCompile Include="..\print-sctp.c" />
+    <ClCompile Include="..\print-sflow.c" />
+    <ClCompile Include="..\print-sip.c" />
+    <ClCompile Include="..\print-sl.c" />
+    <ClCompile Include="..\print-sll.c" />
+    <ClCompile Include="..\print-slow.c" />
+    <ClCompile Include="..\print-smtp.c" />
+    <ClCompile Include="..\print-snmp.c" />
+    <ClCompile Include="..\print-stp.c" />
+    <ClCompile Include="..\print-sunatm.c" />
+    <ClCompile Include="..\print-sunrpc.c" />
+    <ClCompile Include="..\print-symantec.c" />
+    <ClCompile Include="..\print-syslog.c" />
+    <ClCompile Include="..\print-tcp.c" />
+    <ClCompile Include="..\print-telnet.c" />
+    <ClCompile Include="..\print-tftp.c" />
+    <ClCompile Include="..\print-timed.c" />
+    <ClCompile Include="..\print-tipc.c" />
+    <ClCompile Include="..\print-token.c" />
+    <ClCompile Include="..\print-udld.c" />
+    <ClCompile Include="..\print-udp.c" />
+    <ClCompile Include="..\print-usb.c" />
+    <ClCompile Include="..\print-vjc.c" />
+    <ClCompile Include="..\print-vqp.c" />
+    <ClCompile Include="..\print-vrrp.c" />
+    <ClCompile Include="..\print-vtp.c" />
+    <ClCompile Include="..\print-vxlan.c" />
+    <ClCompile Include="..\print-vxlan-gpe.c" />
+    <ClCompile Include="..\print-wb.c" />
+    <ClCompile Include="..\print-zephyr.c" />
+    <ClCompile Include="..\print-zeromq.c" />
+    <ClCompile Include="..\netdissect.c" />
+    <ClCompile Include="..\signature.c" />
+    <ClCompile Include="..\strtoaddr.c" />
+    <ClCompile Include="..\util-print.c" />
+    <ClCompile Include="..\print-smb.c" />
+    <ClCompile Include="..\smbutil.c" />
+    <ClCompile Include="..\missing\strlcat.c" />
+    <ClCompile Include="..\missing\strlcpy.c" />
+    <ClCompile Include="..\missing\strsep.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\addrtoname.h" />
+    <ClInclude Include="..\addrtostr.h" />
+    <ClInclude Include="..\af.h" />
+    <ClInclude Include="..\ah.h" />
+    <ClInclude Include="..\appletalk.h" />
+    <ClInclude Include="..\ascii_strcasecmp.h" />
+    <ClInclude Include="..\atm.h" />
+    <ClInclude Include="..\chdlc.h" />
+    <ClInclude Include="..\cpack.h" />
+    <ClInclude Include="..\ether.h" />
+    <ClInclude Include="..\ethertype.h" />
+    <ClInclude Include="..\extract.h" />
+    <ClInclude Include="..\funcattrs.h" />
+    <ClInclude Include="..\getopt_long.h" />
+    <ClInclude Include="..\gmpls.h" />
+    <ClInclude Include="..\gmt2local.h" />
+    <ClInclude Include="..\interface.h" />
+    <ClInclude Include="..\ip.h" />
+    <ClInclude Include="..\ip6.h" />
+    <ClInclude Include="..\ipproto.h" />
+    <ClInclude Include="..\l2vpn.h" />
+    <ClInclude Include="..\llc.h" />
+    <ClInclude Include="..\machdep.h" />
+    <ClInclude Include="..\mib.h" />
+    <ClInclude Include="..\mpls.h" />
+    <ClInclude Include="..\nameser.h" />
+    <ClInclude Include="..\netdissect-stdinc.h" />
+    <ClInclude Include="..\netdissect.h" />
+    <ClInclude Include="..\nfs.h" />
+    <ClInclude Include="..\nfsfh.h" />
+    <ClInclude Include="..\nlpid.h" />
+    <ClInclude Include="..\openflow.h" />
+    <ClInclude Include="..\ospf.h" />
+    <ClInclude Include="..\oui.h" />
+    <ClInclude Include="..\pcap-missing.h" />
+    <ClInclude Include="..\ppp.h" />
+    <ClInclude Include="..\print.h" />
+    <ClInclude Include="..\rpc_auth.h" />
+    <ClInclude Include="..\rpc_msg.h" />
+    <ClInclude Include="..\rpl.h" />
+    <ClInclude Include="..\setsignal.h" />
+    <ClInclude Include="..\signature.h" />
+    <ClInclude Include="..\slcompress.h" />
+    <ClInclude Include="..\smb.h" />
+    <ClInclude Include="..\strtoaddr.h" />
+    <ClInclude Include="..\tcp.h" />
+    <ClInclude Include="..\timeval-operations.h" />
+    <ClInclude Include="..\udp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="tcpdump.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

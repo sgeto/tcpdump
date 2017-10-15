@@ -784,11 +784,13 @@ ipxsap_string(netdissect_options *ndo, u_short port)
 static void
 init_servarray(netdissect_options *ndo)
 {
+#ifdef _WIN32
+	return ((char *)NULL);
+#else
 	struct servent *sv;
 	register struct hnamemem *table;
 	register int i;
 	char buf[sizeof("0000000000")];
-
 	while ((sv = getservent()) != NULL) {
 		int port = ntohs(sv->s_port);
 		i = port & (HASHNAMESIZE-1);
@@ -813,6 +815,7 @@ init_servarray(netdissect_options *ndo)
 		table->nxt = newhnamemem(ndo);
 	}
 	endservent();
+#endif
 }
 
 static const struct eproto {

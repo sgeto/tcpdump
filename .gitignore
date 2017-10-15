@@ -18,3 +18,13 @@ tcpdump-*.tar.gz
 version.c
 failure-outputs.txt
 autom4te.cache/
+
+*.exe
+*.dll
+*.7z
+*.tar.*
+*.pdb
+
+*.db
+
+*.user

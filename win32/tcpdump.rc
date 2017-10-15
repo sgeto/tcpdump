@@ -1,0 +1,37 @@
+#include <winver.h>
+
+TCPDUMP_ICON ICON "icon.ico"
+
+  VS_VERSION_INFO VERSIONINFO
+    FILEVERSION    4,10,0,0
+    PRODUCTVERSION 4,10,0,0
+    FILEFLAGSMASK  0x3fL
+    FILEOS         VOS__WINDOWS32
+    FILETYPE       VFT_APP
+#ifdef _DEBUG
+    FILEFLAGS 0x1L
+#else
+    FILEFLAGS 0x0L
+#endif
+  BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+      BLOCK "040904b0"
+      BEGIN
+        VALUE "Comments",         "https://github.com/the-tcpdump-group/tcpdump/"
+        VALUE "CompanyName",      "The TCPdump Group"
+        VALUE "FileDescription",  "Network Monitoring and Data Acquisition Utility"
+        VALUE "FileVersion",      "4,10,0,0"
+        VALUE "InternalName",     "tcpdump"
+        VALUE "LegalCopyright",   "Copyright (c) The TCPdump Group"
+        VALUE "LegalTrademarks",  ""
+        VALUE "OriginalFilename", "tcpdump.exe"
+        VALUE "ProductName",      "tcpdump"
+        VALUE "ProductVersion",   "4.10.0-PRE-GIT"
+      END
+    END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0, 1200
+  END
+  END
