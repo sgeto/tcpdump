@@ -4771,8 +4771,13 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* AF_INET6 available check */
 #include <sys/types.h>
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#include <winsock2.h>
+#else
 #include <sys/socket.h>
 #include <netinet/in.h>
+#endif
 #ifdef AF_INET6
 void
 foo(struct in6_addr *addr)
@@ -5074,8 +5079,28 @@ if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
 #define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
+else
+  have_alarm=yes
 fi
 done
+
+
+case "$host_os" in
+
+*mingw*)
+	if test $have_alarm = yes; then
+
+$as_echo "#define _POSIX 1" >>confdefs.h
+
+
+$as_echo "#define __USE_MINGW_ALARM 1" >>confdefs.h
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: found alarm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" >&5
+$as_echo "found alarm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" >&6; }
+	fi
+	LIBS="$LIBS -lws2_32"
+	;;
+esac
 
 
 needsnprintf=no

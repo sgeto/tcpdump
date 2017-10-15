@@ -259,8 +259,13 @@ AC_COMPILE_IFELSE(
 	[[
 /* AF_INET6 available check */
 #include <sys/types.h>
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#include <winsock2.h>
+#else
 #include <sys/socket.h>
 #include <netinet/in.h>
+#endif
 #ifdef AF_INET6
 void
 foo(struct in6_addr *addr)
@@ -403,7 +408,21 @@ fi
 
 AC_REPLACE_FUNCS(vfprintf strlcat strlcpy strdup strsep getopt_long)
 AC_CHECK_FUNCS(fork vfork strftime)
-AC_CHECK_FUNCS(setlinebuf alarm)
+AC_CHECK_FUNCS(setlinebuf alarm,,
+	[have_alarm=yes])
+
+case "$host_os" in
+
+*mingw*)
+	if test $have_alarm = yes; then
+	AC_DEFINE(_POSIX, 1, [define if you have the yomama function])
+	AC_DEFINE(__USE_MINGW_ALARM, 1, [define if you have the yomama function])
+	AC_MSG_RESULT(found alarm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+	fi
+	LIBS="$LIBS -lws2_32"
+	;;
+esac
+
 
 needsnprintf=no
 AC_CHECK_FUNCS(vsnprintf snprintf,,

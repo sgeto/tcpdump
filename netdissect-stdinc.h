@@ -192,10 +192,10 @@
  */
 #ifdef _MSC_VER
 #define inline __inline
-#endif
 
 #ifdef AF_INET6
 #define HAVE_OS_IPV6_SUPPORT
+#endif
 #endif
 
 #ifndef INET6_ADDRSTRLEN

@@ -784,9 +784,7 @@ ipxsap_string(netdissect_options *ndo, u_short port)
 static void
 init_servarray(netdissect_options *ndo)
 {
-#ifdef _WIN32
-	return ((char *)NULL);
-#else
+#ifndef _WIN32
 	struct servent *sv;
 	register struct hnamemem *table;
 	register int i;

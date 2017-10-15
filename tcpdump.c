@@ -2656,7 +2656,7 @@ print_packet(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
 		info(0);
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(WPCAP)
 	/*
 	 * XXX - there should really be libpcap calls to get the version
 	 * number as a string (the string would be generated from #defines
@@ -2737,7 +2737,7 @@ print_version(void)
 	const char *smi_version_string;
 
 #ifdef HAVE_PCAP_LIB_VERSION
-#ifdef _WIN32
+#if defined(_WIN32) && defined(WPCAP)
 	(void)fprintf(stderr, "%s version %s, based on tcpdump version %s\n", program_name, WDversion, version);
 #else /* _WIN32 */
 	(void)fprintf(stderr, "%s version %s\n", program_name, version);
