@@ -784,7 +784,6 @@ ipxsap_string(netdissect_options *ndo, u_short port)
 static void
 init_servarray(netdissect_options *ndo)
 {
-#ifndef _WIN32
 	struct servent *sv;
 	register struct hnamemem *table;
 	register int i;
@@ -813,7 +812,6 @@ init_servarray(netdissect_options *ndo)
 		table->nxt = newhnamemem(ndo);
 	}
 	endservent();
-#endif
 }
 
 static const struct eproto {

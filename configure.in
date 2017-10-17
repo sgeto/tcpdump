@@ -261,7 +261,6 @@ AC_COMPILE_IFELSE(
 #include <sys/types.h>
 #ifdef _WIN32
 #include <ws2tcpip.h>
-#include <winsock2.h>
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -406,7 +405,7 @@ if test "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" = yes; then
 	    [define if you have a dnet_htoa declaration in <netdnet/dnetdb.h>])
 fi
 
-AC_REPLACE_FUNCS(vfprintf strlcat strlcpy strdup strsep getopt_long)
+AC_REPLACE_FUNCS(vfprintf strlcat strlcpy strdup strsep getservent getopt_long)
 AC_CHECK_FUNCS(fork vfork strftime)
 AC_CHECK_FUNCS(setlinebuf alarm,,
 	[have_alarm=yes])
@@ -414,6 +413,7 @@ AC_CHECK_FUNCS(setlinebuf alarm,,
 case "$host_os" in
 
 *mingw*)
+	win32=yes
 	if test $have_alarm = yes; then
 	AC_DEFINE(_POSIX, 1, [define if you have the yomama function])
 	AC_DEFINE(__USE_MINGW_ALARM, 1, [define if you have the yomama function])
@@ -973,7 +973,9 @@ AC_CONFIG_HEADER(config.h)
 AC_OUTPUT_COMMANDS([if test -f .devel; then
 	echo timestamp > stamp-h
 	cat Makefile-devel-adds >> Makefile
-	make depend
+#	if test x$win32 != xyes; then
+#	make depend
+#	fi
 fi])
 AC_OUTPUT(Makefile tcpdump.1)
 exit 0
