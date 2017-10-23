@@ -54,113 +54,37 @@
  * --Copyright--
  */
 
-#ifndef _NETDB_H_
-#define _NETDB_H_
 
-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
-#include <stdio.h>
-#ifndef __MINGW32__
-#include <netinet/in.h>
-#endif
-#endif
+#ifndef _GETSERVENT_H
+#define _GETSERVENT_H
 
-#include <winsock2.h>
-#include <net/paths.h>
-
-#define _PATH_HEQUIV	__PATH_ETC_INET"/hosts.equiv"
-#define _PATH_HOSTS	__PATH_ETC_INET"/hosts"
-#define _PATH_NETWORKS	__PATH_ETC_INET"/networks"
-#define _PATH_PROTOCOLS	__PATH_ETC_INET"/protocols"
-#define _PATH_SERVICES	__PATH_ETC_INET"/services"
-#define _PATH_RESCONF	__PATH_ETC_INET"/resolv.conf"
-#define _PATH_RPC	__PATH_ETC_INET"/rpc"
-
-struct rpcent {
-	char	*r_name;	/* name of server for this rpc program */
-	char	**r_aliases;	/* alias list */
-	int	r_number;	/* rpc program number */
-};
-
-#ifndef WIN32
-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
-
-#define __NETDB_MAXALIASES	35
-#define __NETDB_MAXADDRS	35
-
-/*
- * Error return codes from gethostbyname() and gethostbyaddr()
- * (left in extern int h_errno).
- */
-#define h_errno		(*__h_errno_location ())
+#ifdef _NETDB_H_
+ /* Just in case... */
+#error netdb.h and getservent.h are incompatible
 #else
-extern int h_errno;
+#define _NETDB_H_
 #endif
+
+#ifdef _WIN32
+#define __PATH_SYSROOT  "SYSTEMROOT"
+//#define __PATH_SYSROOT  "yomama"
+#define	__PATH_ETC_INET	"\\System32\\drivers\\etc\\"
+#define __PATH_SERVICES	"services"
+//#define _PATH_SERVICES	"C:\\Windows\\System32\\drivers\\etc\\services"
+#else
+ /*
+ * The idea here is to be able to replace "PREFIX" in __PATH_SYSROOT with a variable
+ * that could, for example, point to an alternative install location.
+ */
+#define __PATH_SYSROOT  "PREFIX"
+#define	__PATH_ETC_INET	"/etc/"
+#define __PATH_SERVICES	__PATH_SYSROOT__PATH_ETC_INET"services"
 #endif
 
-#define	NETDB_INTERNAL -1 /* see errno */
-#define	NETDB_SUCCESS   0 /* no problem */
+#define	MAXALIASES	35
 
-//#include <features.h>
-
-void		endhostent (void);
-void		endnetent (void);
-void		endprotoent (void);
 void		endservent (void);
-void		endrpcent (void);
-struct hostent	*gethostent (void);
-struct netent	*getnetbyaddr (long, int); /* u_long? */
-struct netent	*getnetbyname (const char *);
-struct netent	*getnetent (void);
-struct protoent	*getprotoent (void);
 struct servent	*getservent (void);
-struct rpcent	*getrpcent (void);
-struct rpcent	*getrpcbyname (const char *);
-struct rpcent	*getrpcbynumber (int);
-void		herror (const char *);
-void		sethostent (int);
-/* void		sethostfile (const char *); */
-void		setnetent (int);
-void		setprotoent (int);
 void		setservent (int);
-void		setrpcent (int);
 
-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
-struct hostent	*gethostbyaddr_r (const char *__addr,
-			int __length, int __type,
-			struct hostent *__result,
-			char *__buffer, int __buflen, int *__h_errnop);
-struct hostent	*gethostbyname_r (const char * __name,
-			struct hostent *__result, char *__buffer,
-			int __buflen, int *__h_errnop);
-struct hostent	*gethostent_r (struct hostent *__result,
-			char *__buffer, int __buflen, int *__h_errnop);
-struct netent	*getnetbyaddr_r (long __net, int __type,
-			struct netent *__result, char *__buffer,
-			int __buflen);
-struct netent	*getnetbyname_r (const char * __name,
-			struct netent *__result, char *__buffer,
-			int __buflen);
-struct netent	*getnetent_r (struct netent *__result,
-			char *__buffer, int __buflen);
-struct protoent	*getprotobyname_r (const char * __name,
-			struct protoent *__result, char *__buffer,
-			int __buflen);
-struct protoent	*getprotobynumber_r (int __proto,
-			struct protoent *__result, char *__buffer,
-			int __buflen);
-struct protoent	*getprotoent_r (struct protoent *__result,
-			char *__buffer, int __buflen);
-struct servent	*getservbyname_r (const char * __name,
-			const char *__proto, struct servent *__result,
-			char *__buffer, int __buflen);
-struct servent	*getservbyport_r (int __port,
-			const char *__proto, struct servent *__result,
-			char *__buffer, int __buflen);
-struct servent	*getservent_r (struct servent *__result,
-			char *__buffer, int __buflen);
-
-int *__h_errno_location (void);
-
-#endif
-
-#endif /* !_NETDB_H_ */
+#endif /* !_GETSERVENT_H */

@@ -1,0 +1,158 @@
+Packet Analyzer: 15 TCPDUMP Command Examples
+
+by Sasikala on August 25, 2010
+ 
+
+tcpdump command is also called as packet analyzer.
+
+tcpdump command will work on most flavors of unix operating system. tcpdump allows us to save the packets that are captured, so that we can use it for future analysis. The saved file can be viewed by the same tcpdump command. We can also use open source software like wireshark to read the tcpdump pcap files.
+
+In this tcpdump tutorial, let us discuss some practical examples on how to use the tcpdump command.
+
+1. Capture packets from a particular ethernet interface using tcpdump -i
+
+When you execute tcpdump command without any option, it will capture all the packets flowing through all the interfaces. -i option with tcpdump command, allows you to filter on a particular ethernet interface.
+
+$ tcpdump -i eth1
+14:59:26.608728 IP xx.domain.netbcp.net.52497 > valh4.lell.net.ssh: . ack 540 win 16554
+14:59:26.610602 IP resolver.lell.net.domain > valh4.lell.net.24151:  4278 1/0/0 (73)
+14:59:26.611262 IP valh4.lell.net.38527 > resolver.lell.net.domain:  26364+ PTR? 244.207.104.10.in-addr.arpa. (45)
+In this example, tcpdump captured all the packets flows in the interface eth1 and displays in the standard output.
+
+Note: Editcap utility is used to select or remove specific packets from dump file and translate them into a given format.
+
+2. Capture only N number of packets using tcpdump -c
+
+When you execute tcpdump command it gives packets until you cancel the tcpdump command. Using -c option you can specify the number of packets to capture.
+
+$ tcpdump -c 2 -i eth0
+listening on eth0, link-type EN10MB (Ethernet), capture size 96 bytes
+14:38:38.184913 IP valh4.lell.net.ssh > yy.domain.innetbcp.net.11006: P 1457255642:1457255758(116) ack 1561463966 win 63652
+14:38:38.690919 IP valh4.lell.net.ssh > yy.domain.innetbcp.net.11006: P 116:232(116) ack 1 win 63652
+2 packets captured
+13 packets received by filter
+0 packets dropped by kernel
+The above tcpdump command captured only 2 packets from interface eth0.
+
+Note: Mergecap and TShark: Mergecap is a packet dump combining tool, which will combine multiple dumps into a single dump file. Tshark is a powerful tool to capture network packets, which can be used to analyze the network traffic. It comes with wireshark network analyzer distribution.
+
+3. Display Captured Packets in ASCII using tcpdump -A
+
+The following tcpdump syntax prints the packet in ASCII.
+
+$ tcpdump -A -i eth0
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 96 bytes
+14:34:50.913995 IP valh4.lell.net.ssh > yy.domain.innetbcp.net.11006: P 1457239478:1457239594(116) ack 1561461262 win 63652
+E.....@.@..]..i...9...*.V...]...P....h....E...>{..U=...g.
+......G..7\+KA....A...L.
+14:34:51.423640 IP valh4.lell.net.ssh > yy.domain.innetbcp.net.11006: P 116:232(116) ack 1 win 63652
+E.....@.@..\..i...9...*.V..*]...P....h....7......X..!....Im.S.g.u:*..O&....^#Ba...
+E..(R.@.|.....9...i.*...]...V..*P..OWp........
+Note: Ifconfig command is used to configure network interfaces
+
+4. Display Captured Packets in HEX and ASCII using tcpdump -XX
+
+Some users might want to analyse the packets in hex values. tcpdump provides a way to print packets in both ASCII and HEX format.
+
+$tcpdump -XX -i eth0
+18:52:54.859697 IP zz.domain.innetbcp.net.63897 > valh4.lell.net.ssh: . ack 232 win 16511
+        0x0000:  0050 569c 35a3 0019 bb1c 0c00 0800 4500  .PV.5.........E.
+        0x0010:  0028 042a 4000 7906 c89c 10b5 aaf6 0f9a  .(.*@.y.........
+        0x0020:  69c4 f999 0016 57db 6e08 c712 ea2e 5010  i.....W.n.....P.
+        0x0030:  407f c976 0000 0000 0000 0000            @..v........
+18:52:54.877713 IP 10.0.0.0 > all-systems.mcast.net: igmp query v3 [max resp time 1s]
+        0x0000:  0050 569c 35a3 0000 0000 0000 0800 4600  .PV.5.........F.
+        0x0010:  0024 0000 0000 0102 3ad3 0a00 0000 e000  .$......:.......
+        0x0020:  0001 9404 0000 1101 ebfe 0000 0000 0300  ................
+        0x0030:  0000 0000 0000 0000 0000 0000            ............
+5. Capture the packets and write into a file using tcpdump -w
+
+tcpdump allows you to save the packets to a file, and later you can use the packet file for further analysis.
+
+$ tcpdump -w 08232010.pcap -i eth0
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 96 bytes
+32 packets captured
+32 packets received by filter
+0 packets dropped by kernel
+-w option writes the packets into a given file. The file extension should be .pcap, which can be read by any network protocol
+analyzer.
+
+6. Reading the packets from a saved file using tcpdump -r
+
+You can read the captured pcap file and view the packets for analysis, as shown below.
+
+$tcpdump -tttt -r data.pcap
+2010-08-22 21:35:26.571793 00:50:56:9c:69:38 (oui Unknown) > Broadcast, ethertype Unknown (0xcafe), length 74:
+        0x0000:  0200 000a ffff 0000 ffff 0c00 3c00 0000  ............<...
+        0x0010:  0000 0000 0100 0080 3e9e 2900 0000 0000  ........>.).....
+        0x0020:  0000 0000 ffff ffff ad00 996b 0600 0050  ...........k...P
+        0x0030:  569c 6938 0000 0000 8e07 0000            V.i8........
+2010-08-22 21:35:26.571797 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.50570: P 800464396:800464448(52) ack 203316566 win 71
+2010-08-22 21:35:26.571800 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.50570: P 52:168(116) ack 1 win 71
+2010-08-22 21:35:26.584865 IP valh5.lell.net.ssh > 11.154.12.255.netbios-ns: NBT UDP PACKET(137): QUERY; REQUEST; BROADC
+7. Capture packets with IP address using tcpdump -n
+
+In all the above examples, it prints packets with the DNS address, but not the ip address. The following example captures the packets and it will display the IP address of the machines involved.
+
+$ tcpdump -n -i eth0
+15:01:35.170763 IP 10.0.19.121.52497 > 11.154.12.121.ssh: P 105:157(52) ack 18060 win 16549
+15:01:35.170776 IP 11.154.12.121.ssh > 10.0.19.121.52497: P 23988:24136(148) ack 157 win 113
+15:01:35.170894 IP 11.154.12.121.ssh > 10.0.19.121.52497: P 24136:24380(244) ack 157 win 113
+8. Capture packets with proper readable timestamp using tcpdump -tttt
+
+$ tcpdump -n -tttt -i eth0
+
+2010-08-22 15:10:39.162830 IP 10.0.19.121.52497 > 11.154.12.121.ssh: . ack 49800 win 16390
+2010-08-22 15:10:39.162833 IP 10.0.19.121.52497 > 11.154.12.121.ssh: . ack 50288 win 16660
+2010-08-22 15:10:39.162867 IP 10.0.19.121.52497 > 11.154.12.121.ssh: . ack 50584 win 16586
+9. Read packets longer than N bytes
+
+You can receive only the packets greater than n number of bytes using a filter ‘greater’ through tcpdump command
+
+$ tcpdump -w g_1024.pcap greater 1024
+10. Receive only the packets of a specific protocol type
+
+You can receive the packets based on the protocol type. You can specify one of these protocols — fddi, tr, wlan, ip, ip6, arp, rarp, decnet, tcp and udp. The following example captures only arp packets flowing through the eth0 interface.
+
+$ tcpdump -i eth0 arp
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 96 bytes
+19:41:52.809642 arp who-has valh5.lell.net tell valh9.lell.net
+19:41:52.863689 arp who-has 11.154.12.1 tell valh6.lell.net
+19:41:53.024769 arp who-has 11.154.12.1 tell valh7.lell.net
+11. Read packets lesser than N bytes
+
+You can receive only the packets lesser than n number of bytes using a filter ‘less’ through tcpdump command
+
+$ tcpdump -w l_1024.pcap  less 1024
+12. Receive packets flows on a particular port using tcpdump port
+
+If you want to know all the packets received by a particular port on a machine, you can use tcpdump command as shown below.
+
+$ tcpdump -i eth0 port 22
+19:44:44.934459 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.63897: P 18932:19096(164) ack 105 win 71
+19:44:44.934533 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.63897: P 19096:19260(164) ack 105 win 71
+19:44:44.934612 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.63897: P 19260:19424(164) ack 105 win 71
+13. Capture packets for particular destination IP and Port
+
+The packets will have source and destination IP and port numbers. Using tcpdump we can apply filters on source or destination IP and port number. The following command captures packets flows in eth0, with a particular destination ip and port number 22.
+
+$ tcpdump -w xpackets.pcap -i eth0 dst 10.181.140.216 and port 22
+14. Capture TCP communication packets between two hosts
+
+If two different process from two different machines are communicating through tcp protocol, we can capture those packets using tcpdump as shown below.
+
+$tcpdump -w comm.pcap -i eth0 dst 16.181.170.246 and port 22
+You can open the file comm.pcap using any network protocol analyzer tool to debug any potential issues.
+
+15. tcpdump Filter Packets – Capture all the packets other than arp and rarp
+
+In tcpdump command, you can give “and”, “or” and “not” condition to filter the packets accordingly.
+
+$ tcpdump -i eth0 not arp and not rarp
+20:33:15.479278 IP resolver.lell.net.domain > valh4.lell.net.64639:  26929 1/0/0 (73)
+20:33:15.479890 IP valh4.lell.net.16053 > resolver.lell.net.domain:  56556+ PTR? 255.107.154.15.in-addr.arpa. (45)
+20:33:15.480197 IP valh4.lell.net.ssh > zz.domain.innetbcp.net.63897: P 540:1504(964) ack 1 win 96
+20:33:15.487118 IP zz.domain.innetbcp.net.63897 > valh4.lell.net.ssh: . ack 540 win 16486
+20:33:15.668599 IP 10.0.0.0 > all-systems.mcast.net: igmp query v3 [max resp time 1s]

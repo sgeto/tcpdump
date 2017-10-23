@@ -4773,7 +4773,6 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #include <sys/types.h>
 #ifdef _WIN32
 #include <ws2tcpip.h>
-#include <winsock2.h>
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -5044,6 +5043,19 @@ esac
 
 fi
 
+ac_fn_c_check_func "$LINENO" "getservent" "ac_cv_func_getservent"
+if test "x$ac_cv_func_getservent" = xyes; then :
+  $as_echo "#define HAVE_GETSERVENT 1" >>confdefs.h
+
+else
+  case " $LIBOBJS " in
+  *" getservent.$ac_objext "* ) ;;
+  *) LIBOBJS="$LIBOBJS getservent.$ac_objext"
+ ;;
+esac
+
+fi
+
 ac_fn_c_check_func "$LINENO" "getopt_long" "ac_cv_func_getopt_long"
 if test "x$ac_cv_func_getopt_long" = xyes; then :
   $as_echo "#define HAVE_GETOPT_LONG 1" >>confdefs.h
@@ -5088,6 +5100,7 @@ done
 case "$host_os" in
 
 *mingw*)
+	win32=yes
 	if test $have_alarm = yes; then
 
 $as_echo "#define _POSIX 1" >>confdefs.h
@@ -9193,7 +9206,9 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
     "default-1":C) if test -f .devel; then
 	echo timestamp > stamp-h
 	cat Makefile-devel-adds >> Makefile
-	make depend
+#	if test x$win32 != xyes; then
+#	make depend
+#	fi
 fi ;;
 
   esac

@@ -5,6 +5,7 @@ Makefile
 *.o
 libnetdissect.a
 config.h
+!win32/config.h
 config.log
 config.cache
 config.status

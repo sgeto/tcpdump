@@ -72,15 +72,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -105,6 +111,8 @@ for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
 set vstring=%%F
 )
 
+:: XXX - Only add the date to version string when building from git???
+
 :: Construct the date string and store it in %_curdate%
 :: Note: This presumes that your date string is formatted 
 :: as 10/06/2017 or Fri 10/06/2017
@@ -112,19 +120,27 @@ set vstring=%%F
 :: set curdate=%%x
 :: )
 
-:: Uncomment the following lines (and comment the above) 
+:: Comment the following lines (and uncomment the above) 
 :: if you are in a country other than the United States.
 for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
 set curdate=%%A
 )
 
+
 echo.
-echo Building TCPdump %vstring%%curdate%
+echo Building $(ProjectName) %vstring%%curdate%
 echo.
 
-echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+echo const char version[] = "%vstring%%curdate%";&gt; $(SolutionDir)version.c</Command>
       <Message>Generate version.c</Message>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(TargetFileName) $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).pdb $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).ilk $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(SolutionDir)</Command>
+      <Message>Copy output files to $(SolutionDir)</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -149,6 +165,8 @@ for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
 set vstring=%%F
 )
 
+:: XXX - Only add the date to version string when building from git???
+
 :: Construct the date string and store it in %_curdate%
 :: Note: This presumes that your date string is formatted 
 :: as 10/06/2017 or Fri 10/06/2017
@@ -156,19 +174,27 @@ set vstring=%%F
 :: set curdate=%%x
 :: )
 
-:: Uncomment the following lines (and comment the above) 
+:: Comment the following lines (and uncomment the above) 
 :: if you are in a country other than the United States.
 for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
 set curdate=%%A
 )
 
+
 echo.
-echo Building TCPdump %vstring%%curdate%
+echo Building $(ProjectName) %vstring%%curdate%
 echo.
 
-echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+echo const char version[] = "%vstring%%curdate%";&gt; $(SolutionDir)version.c</Command>
       <Message>Generate version.c</Message>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(TargetFileName) $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).pdb $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).ilk $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(SolutionDir)</Command>
+      <Message>Copy output files to $(SolutionDir)</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -196,6 +222,8 @@ for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
 set vstring=%%F
 )
 
+:: XXX - Only add the date to version string when building from git???
+
 :: Construct the date string and store it in %_curdate%
 :: Note: This presumes that your date string is formatted 
 :: as 10/06/2017 or Fri 10/06/2017
@@ -203,19 +231,27 @@ set vstring=%%F
 :: set curdate=%%x
 :: )
 
-:: Uncomment the following lines (and comment the above) 
+:: Comment the following lines (and uncomment the above) 
 :: if you are in a country other than the United States.
 for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
 set curdate=%%A
 )
 
+
 echo.
-echo Building TCPdump %vstring%%curdate%
+echo Building $(ProjectName) %vstring%%curdate%
 echo.
 
-echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+echo const char version[] = "%vstring%%curdate%";&gt; $(SolutionDir)version.c</Command>
       <Message>Generate version.c</Message>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(TargetFileName) $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).pdb $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).ilk $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(SolutionDir)</Command>
+      <Message>Copy output files to $(SolutionDir)</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -243,6 +279,8 @@ for /f "tokens=* usebackq" %%F in (`type $(SolutionDir)..\VERSION`) do (
 set vstring=%%F
 )
 
+:: XXX - Only add the date to version string when building from git???
+
 :: Construct the date string and store it in %_curdate%
 :: Note: This presumes that your date string is formatted 
 :: as 10/06/2017 or Fri 10/06/2017
@@ -250,22 +288,31 @@ set vstring=%%F
 :: set curdate=%%x
 :: )
 
-:: Uncomment the following lines (and comment the above) 
+:: Comment the following lines (and uncomment the above) 
 :: if you are in a country other than the United States.
 for /f "delims=" %%A in ('powershell get-date -format "{_yyyy_MM_dd}"') do (
 set curdate=%%A
 )
 
+
 echo.
-echo Building TCPdump %vstring%%curdate%
+echo Building $(ProjectName) %vstring%%curdate%
 echo.
 
-echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</Command>
+echo const char version[] = "%vstring%%curdate%";&gt; $(SolutionDir)version.c</Command>
       <Message>Generate version.c</Message>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(TargetFileName) $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).pdb $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).ilk $(SolutionDir)
+copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(SolutionDir)</Command>
+      <Message>Copy output files to $(SolutionDir)</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\missing\getopt_long.c" />
+    <ClCompile Include="..\missing\getservent.c" />
     <ClCompile Include="..\setsignal.c" />
     <ClCompile Include="..\tcpdump.c" />
     <ClCompile Include="version.c" />
@@ -467,6 +514,7 @@ echo const char version[] = "%vstring%%curdate%"; &gt; $(SolutionDir)version.c</
     <ClInclude Include="..\nameser.h" />
     <ClInclude Include="..\netdissect-stdinc.h" />
     <ClInclude Include="..\netdissect.h" />
+    <ClInclude Include="..\net\netdb.h" />
     <ClInclude Include="..\nfs.h" />
     <ClInclude Include="..\nfsfh.h" />
     <ClInclude Include="..\nlpid.h" />

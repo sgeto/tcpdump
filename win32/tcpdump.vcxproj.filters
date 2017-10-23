@@ -531,6 +531,9 @@
     <ClCompile Include="..\missing\getopt_long.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\missing\getservent.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\setsignal.h">
@@ -675,6 +678,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\timeval-operations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\netdb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

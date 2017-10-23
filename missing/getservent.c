@@ -31,35 +31,79 @@
  * SUCH DAMAGE.
  */
 
-#if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)getservent.c	8.1 (Berkeley) 6/4/93";
-#endif /* LIBC_SCCS and not lint */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <sys/types.h>
-#include <string.h>
-
-#include <stdlib.h>
-#include <ctype.h>
+#include <netdissect-stdinc.h>
 #include <net/netdb.h>
-#include <stdio.h>
-#include <errno.h>
-#include <arpa/nameser.h>
 
-#define	MAXALIASES	35
+void error(const char *fmt, ...) {
+	va_list  ap;
 
-static char SERVDB[] = _PATH_SERVICES;
+	va_start(ap, fmt);
+	va_end(ap);
+	return;
+}
+
+#ifdef _WIN32bbb
+static int      pre_env_done = 0;
+static char    *s_fn;
+static void
+pre_env(void)
+{
+	const char     *cproot;
+	const char     *cp = "";
+
+	if (pre_env_done)
+		return;
+	pre_env_done = 1;
+
+	cp = getenv("SYSTEMROOT");
+	cproot = __PATH_ETC_INET;
+	s_fn =		(char *)malloc(3 + strlen(cp) + strlen(cproot) + strlen(__PATH_SERVICES));
+	if (s_fn)
+		sprintf(s_fn, "%s%s%s", cp, cproot, __PATH_SERVICES);
+}
+#endif
+
+
+static char SERVDB[] = __PATH_SERVICES;
 static FILE *servf = NULL;
 static char line[BUFSIZ+1];
 static struct servent serv;
 static char *serv_aliases[MAXALIASES];
 int _serv_stayopen;
 
+/*
+* Return path to "%SYSTEMROOT%\System32\drivers\etc\<file>"  (WIN32)
+*          or to "%PREFIX%/etc/<file>"                       (The rest)
+*/
+const char *etc_path(const char *file)
+{
+	const char *env = getenv(__PATH_SYSROOT);
+	static char path[_MAX_PATH];
+
+	if (!env)
+//#ifdef _DEBUG
+	//	printf("Warning: Environment Variable \"%s\" invalid (GetLastError: %d)\nResorting to [CurrentDirectory]/%s\n"
+	//		,__PATH_SYSROOT, GetLastError(), file);
+//#endif
+		return (file);
+
+//	snprintf(path, sizeof(path), "%s\\system32\\drivers\\etc\\%s", env, file);
+	snprintf(path, sizeof(path), "%s%s%s", env, __PATH_ETC_INET, file);
+	return (path);
+}
+
 void
 setservent(f)
 	int f;
 {
 	if (servf == NULL)
-		servf = fopen(SERVDB, "r" );
+//		servf = fopen(SERVDB, "r");
+//		if (servf == NULL)
+		servf = fopen(etc_path(__PATH_SERVICES), "r");
 	else
 		rewind(servf);
 	_serv_stayopen |= f;
@@ -81,8 +125,12 @@ getservent()
 	char *p;
 	register char *cp, **q;
 
-	if (servf == NULL && (servf = fopen(SERVDB, "r" )) == NULL)
+	if (servf == NULL && (servf = fopen(etc_path(SERVDB), "r")) == NULL)
+//	if (servf == NULL && (servf = fopen(SERVDB, "r")) == NULL)
+
+//	printf("etc_pathSERVDB: %s SERVDB: %s", etc_path(SERVDB), SERVDB);
 		return (NULL);
+
 again:
 	if ((p = fgets(line, BUFSIZ, servf)) == NULL)
 		return (NULL);

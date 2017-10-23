@@ -1,0 +1,18 @@
+checking whether the compiler fails when given an unknown warning option... yes
+checking whether the compiler supports the -Wall option... yes
+checking whether the compiler supports the -Wmissing-prototypes option... yes
+checking whether the compiler supports the -Wstrict-prototypes option... yes
+checking whether the compiler supports the -Wwrite-strings option... yes
+checking whether the compiler supports the -Wpointer-arith option... yes
+checking whether the compiler supports the -Wcast-qual option... yes
+checking whether the compiler supports the -Wshadow option... yes
+checking whether the compiler supports the -Wdeclaration-after-statement option... yes
+checking whether the compiler supports the -Wpedantic option... yes
+checking whether the compiler supports the -Wold-style-definition option... yes
+checking whether the compiler supports the -Wused-but-marked-unused option... no
+checking whether the compiler supports the -W option... yes
+checking whether the compiler supports the -Wassign-enum option... no
+checking whether the compiler supports generating dependencies... yes, with -M
+configure: WARNING: can't find lbl/os-mingw32.h
+
+./mkdep -c gcc -m -M -DHAVE_CONFIG_H   -D_U_="__attribute__((unused))" -I. -IC:/msys64/mingw64/include

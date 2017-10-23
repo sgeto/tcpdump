@@ -307,7 +307,7 @@ int espprint_decode_hex(netdissect_options *ndo,
 			u_char *binbuf, unsigned int binbuf_len,
 			char *hex)
 {
-	unsigned int len;
+	u_int len;
 	int i;
 
 	len = strlen(hex) / 2;

@@ -1,0 +1,7 @@
+https://github.com/hsluoyz/WinDump/issues/1
+
+https://github.com/the-tcpdump-group/libpcap/issues/562
+
+https://sourceforge.net/p/net-snmp/code/ci/master/tree/
+
+steal Net-SNMP (README service registration) stuff for rpcap daemon
