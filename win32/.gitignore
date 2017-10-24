@@ -1,0 +1,8 @@
+/web
+/*.pdf
+/*.opendb
+/*.log
+/*.ilk
+/x64
+/net-snmp-5.7.3
+/services

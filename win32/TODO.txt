@@ -1,3 +1,18 @@
+wireshark doesn't know pcap only wpcap
+
+Monitoring DNS Queries with tcpdump
+
+tcpdump -vvv -s 0 -l -n port 53
+
+This outputs each DNS query and response on a separate line
+
+−l Make stdout line buffered. Useful if you want to see the data while capturing it. E.g.,
+tcpdump −l | tee dat
+or
+tcpdump −l > dat & tail −f dat
+Note that on Windows,‘‘line buffered’’ means ‘‘unbuffered’’, so that WinDump will write each
+character individually if −l is specified.
+
 https://github.com/hsluoyz/WinDump/issues/1
 
 https://github.com/the-tcpdump-group/libpcap/issues/562

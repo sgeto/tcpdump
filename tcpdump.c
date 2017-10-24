@@ -212,7 +212,6 @@ RETSIGTYPE requestinfo(int);
 #endif
 
 #if defined(USE_WIN32_MM_TIMER)
-  #include <MMsystem.h>
   static UINT timer_id;
   static void CALLBACK verbose_stats_dump(UINT, UINT, DWORD_PTR, DWORD_PTR, DWORD_PTR);
 #elif defined(HAVE_ALARM)

@@ -500,6 +500,7 @@ copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(Solution
     <ClInclude Include="..\extract.h" />
     <ClInclude Include="..\funcattrs.h" />
     <ClInclude Include="..\getopt_long.h" />
+    <ClInclude Include="..\getservent.h" />
     <ClInclude Include="..\gmpls.h" />
     <ClInclude Include="..\gmt2local.h" />
     <ClInclude Include="..\interface.h" />
@@ -514,7 +515,6 @@ copy /y $(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName).log $(Solution
     <ClInclude Include="..\nameser.h" />
     <ClInclude Include="..\netdissect-stdinc.h" />
     <ClInclude Include="..\netdissect.h" />
-    <ClInclude Include="..\net\netdb.h" />
     <ClInclude Include="..\nfs.h" />
     <ClInclude Include="..\nfsfh.h" />
     <ClInclude Include="..\nlpid.h" />

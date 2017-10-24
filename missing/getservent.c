@@ -1,6 +1,9 @@
 /*
- * Copyright (c) 1983, 1993
- *	The Regents of the University of California.  All rights reserved.
+ * Copyright (c) 1983, 1993	The Regents of the University of California.
+ * Copyright (c) 1993 Digital Equipment Corporation.
+ * Copyright (c) 2012 G. Vanem <gvanem@yahoo.no>.
+ * Copyright (c) 2017 Ali Abdulkadir <autostart.ini@gmail.com>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,138 +39,105 @@
 #endif
 
 #include <netdissect-stdinc.h>
-#include <net/netdb.h>
+#include <getservent.h>
 
-void error(const char *fmt, ...) {
-	va_list  ap;
-
-	va_start(ap, fmt);
-	va_end(ap);
-	return;
-}
-
-#ifdef _WIN32bbb
-static int      pre_env_done = 0;
-static char    *s_fn;
-static void
-pre_env(void)
-{
-	const char     *cproot;
-	const char     *cp = "";
-
-	if (pre_env_done)
-		return;
-	pre_env_done = 1;
-
-	cp = getenv("SYSTEMROOT");
-	cproot = __PATH_ETC_INET;
-	s_fn =		(char *)malloc(3 + strlen(cp) + strlen(cproot) + strlen(__PATH_SERVICES));
-	if (s_fn)
-		sprintf(s_fn, "%s%s%s", cp, cproot, __PATH_SERVICES);
-}
-#endif
-
-
-static char SERVDB[] = __PATH_SERVICES;
 static FILE *servf = NULL;
 static char line[BUFSIZ+1];
 static struct servent serv;
 static char *serv_aliases[MAXALIASES];
 int _serv_stayopen;
+const char *etc_path(const char *file);
 
 /*
-* Return path to "%SYSTEMROOT%\System32\drivers\etc\<file>"  (WIN32)
-*          or to "%PREFIX%/etc/<file>"                       (The rest)
+* Return either "%SYSTEMROOT%\System32\drivers\etc\<file>",
+* $PREFIX/etc/<file> or simply "<file>" if those failed.
+* "<file>" is aka __PATH_SERVICES (aka "services" on Windows and
+* "/etc/services" on other platforms that would need this)
 */
 const char *etc_path(const char *file)
 {
-	const char *env = getenv(__PATH_SYSROOT);
-	static char path[_MAX_PATH];
+    const char *env = getenv(__PATH_SYSROOT);
+    static char path[_MAX_PATH];
 
-	if (!env)
-//#ifdef _DEBUG
-	//	printf("Warning: Environment Variable \"%s\" invalid (GetLastError: %d)\nResorting to [CurrentDirectory]/%s\n"
-	//		,__PATH_SYSROOT, GetLastError(), file);
-//#endif
-		return (file);
+    if (!env)
+/*
+* #ifdef _DEBUG
+*   printf("Warning: Environment Variable \"%s\" invalid\nResorting to [CurrentDirectory]/%s\n",
+*       __PATH_SYSROOT, file);
+* #endif
+*/
+        return (file);
 
-//	snprintf(path, sizeof(path), "%s\\system32\\drivers\\etc\\%s", env, file);
-	snprintf(path, sizeof(path), "%s%s%s", env, __PATH_ETC_INET, file);
-	return (path);
+    snprintf(path, sizeof(path), "%s%s%s", env, __PATH_ETC_INET, file);
+    return (path);
 }
 
 void
-setservent(f)
-	int f;
+setservent(int f)
 {
-	if (servf == NULL)
-//		servf = fopen(SERVDB, "r");
-//		if (servf == NULL)
-		servf = fopen(etc_path(__PATH_SERVICES), "r");
-	else
-		rewind(servf);
-	_serv_stayopen |= f;
+    if (servf == NULL)
+        servf = fopen(etc_path(__PATH_SERVICES), "r");
+    else
+        rewind(servf);
+    _serv_stayopen |= f;
 }
 
 void
-endservent()
+endservent(void)
 {
-	if (servf) {
-		fclose(servf);
-		servf = NULL;
-	}
-	_serv_stayopen = 0;
+    if (servf) {
+        fclose(servf);
+        servf = NULL;
+    }
+    _serv_stayopen = 0;
 }
 
 struct servent *
-getservent()
+getservent(void)
 {
-	char *p;
-	register char *cp, **q;
+    char *p;
+    register char *cp, **q;
 
-	if (servf == NULL && (servf = fopen(etc_path(SERVDB), "r")) == NULL)
-//	if (servf == NULL && (servf = fopen(SERVDB, "r")) == NULL)
-
-//	printf("etc_pathSERVDB: %s SERVDB: %s", etc_path(SERVDB), SERVDB);
-		return (NULL);
+    if (servf == NULL && (servf = fopen(etc_path(__PATH_SERVICES), "r")) == NULL)
+        return (NULL);
 
 again:
-	if ((p = fgets(line, BUFSIZ, servf)) == NULL)
-		return (NULL);
-	if (*p == '#')
-		goto again;
-	cp = strpbrk(p, "#\n");
-	if (cp == NULL)
-		goto again;
-	*cp = '\0';
-	serv.s_name = p;
-	p = strpbrk(p, " \t");
-	if (p == NULL)
-		goto again;
-	*p++ = '\0';
-	while (*p == ' ' || *p == '\t')
-		p++;
-	cp = strpbrk(p, ",/");
-	if (cp == NULL)
-		goto again;
-	*cp++ = '\0';
-	serv.s_port = htons((u_short)atoi(p));
-	serv.s_proto = cp;
-	q = serv.s_aliases = serv_aliases;
-	cp = strpbrk(cp, " \t");
-	if (cp != NULL)
-		*cp++ = '\0';
-	while (cp && *cp) {
-		if (*cp == ' ' || *cp == '\t') {
-			cp++;
-			continue;
-		}
-		if (q < &serv_aliases[MAXALIASES - 1])
-			*q++ = cp;
-		cp = strpbrk(cp, " \t");
-		if (cp != NULL)
-			*cp++ = '\0';
-	}
-	*q = NULL;
-	return (&serv);
+    if ((p = fgets(line, BUFSIZ, servf)) == NULL)
+        return (NULL);
+    if (*p == '#')
+        goto again;
+    cp = strpbrk(p, "#\n");
+    if (cp == NULL)
+        goto again;
+    *cp = '\0';
+    serv.s_name = p;
+    p = strpbrk(p, " \t");
+    if (p == NULL)
+        goto again;
+    *p++ = '\0';
+    while (*p == ' ' || *p == '\t')
+        p++;
+    cp = strpbrk(p, ",/");
+    if (cp == NULL)
+        goto again;
+    *cp++ = '\0';
+    serv.s_port = htons((u_short)atoi(p));
+    serv.s_proto = cp;
+    q = serv.s_aliases = serv_aliases;
+    cp = strpbrk(cp, " \t");
+    if (cp != NULL)
+        *cp++ = '\0';
+    while (cp && *cp) {
+        if (*cp == ' ' || *cp == '\t') {
+            cp++;
+            continue;
+        }
+        if (q < &serv_aliases[MAXALIASES - 1])
+            *q++ = cp;
+        cp = strpbrk(cp, " \t");
+        if (cp != NULL)
+            *cp++ = '\0';
+    }
+    *q = NULL;
+    return (&serv);
 }

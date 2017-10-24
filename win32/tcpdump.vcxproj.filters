@@ -680,7 +680,7 @@
     <ClInclude Include="..\timeval-operations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\net\netdb.h">
+    <ClInclude Include="..\getservent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
