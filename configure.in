@@ -90,6 +90,10 @@ darwin*)
 		esac
 	fi
 	;;
+*mingw*)
+# comes too early?
+	V_CCOPT="-Wno-pedantic-ms-format $V_CCOPT"
+	;;
 esac
 
 
@@ -403,6 +407,17 @@ if test "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" = yes; then
 	AC_DEFINE(HAVE_NETDNET_DNETDB_H_DNET_HTOA, 1,
 	    [define if you have a dnet_htoa declaration in <netdnet/dnetdb.h>])
 fi
+
+AC_CACHE_CHECK([for dnet_htoa declaration in ws2dnet.h],
+[td_cv_decl_netdnet_dnetdb_h_dnet_htoa],
+[AC_EGREP_HEADER(dnet_htoa, ws2dnet.h,
+	td_cv_decl_netdnet_dnetdb_h_dnet_htoa=yes,
+	td_cv_decl_netdnet_dnetdb_h_dnet_htoa=no)])
+if test "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" = yes; then
+	AC_DEFINE(HAVE_NETDNET_DNETDB_H_DNET_HTOA, 1,
+	    [define if you have a dnet_htoa declaration in <netdnet/dnetdb.h>])
+fi
+
 
 AC_REPLACE_FUNCS(vfprintf strlcat strlcpy strdup strsep getservent getopt_long)
 AC_CHECK_FUNCS(fork vfork strftime)

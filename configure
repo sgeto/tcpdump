@@ -4117,6 +4117,9 @@ fi
 		esac
 	fi
 	;;
+*mingw*)
+	V_CCOPT="$V_CCOPT -Wno-pedantic-ms-format"
+	;;
 esac
 
 
@@ -4944,6 +4947,34 @@ if test "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" = yes; then
 $as_echo "#define HAVE_NETDNET_DNETDB_H_DNET_HTOA 1" >>confdefs.h
 
 fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dnet_htoa declaration in ws2dnet.h" >&5
+$as_echo_n "checking for dnet_htoa declaration in ws2dnet.h... " >&6; }
+if ${td_cv_decl_netdnet_dnetdb_h_dnet_htoa+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <ws2dnet.h>
+
+_ACEOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  $EGREP "dnet_htoa" >/dev/null 2>&1; then :
+  td_cv_decl_netdnet_dnetdb_h_dnet_htoa=yes
+else
+  td_cv_decl_netdnet_dnetdb_h_dnet_htoa=no
+fi
+rm -f conftest*
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $td_cv_decl_netdnet_dnetdb_h_dnet_htoa" >&5
+$as_echo "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" >&6; }
+if test "$td_cv_decl_netdnet_dnetdb_h_dnet_htoa" = yes; then
+
+$as_echo "#define HAVE_NETDNET_DNETDB_H_DNET_HTOA 1" >>confdefs.h
+
+fi
+
 
 ac_fn_c_check_func "$LINENO" "vfprintf" "ac_cv_func_vfprintf"
 if test "x$ac_cv_func_vfprintf" = xyes; then :
